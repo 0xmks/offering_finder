@@ -1,0 +1,17 @@
+[project]
+name = "offering-finder"
+version = "0.1.0"
+description = "aws RI SP offering id finder"
+readme = "README.md"
+authors = [
+    { name = "k1s1eee", email = "0xmks@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "boto3>=1.35.69",
+    "click>=8.1.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
