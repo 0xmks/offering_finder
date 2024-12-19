@@ -26,9 +26,6 @@
     pip install -r requirements.txt
     ```
 
-
-## Usage
-
 ## AWS Profile Setup
 
 Before using the commands, ensure that you have set an accessible AWS account profile with read permissions. This is necessary for the commands to function correctly. You can set the AWS profile by using the following command.
@@ -36,6 +33,8 @@ Before using the commands, ensure that you have set an accessible AWS account pr
 ```sh
 export AWS_PROFILE=youre_readonly_permission_profile
 ```
+
+## Usage
 
 1. Run `cli.py` to retrieve offering IDs based on the specified parameters:
     ```bash
