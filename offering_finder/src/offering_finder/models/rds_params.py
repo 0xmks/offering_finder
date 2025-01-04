@@ -4,6 +4,7 @@ from typing import Optional, Dict, Any
 
 @dataclass
 class OfferingParams:
+    region_name: Optional[str] = "ap-northeast-1"
     reserved_db_instances_offering_id: Optional[str] = None
     product_description: Optional[str] = None
     db_instance_class: Optional[str] = None
