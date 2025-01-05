@@ -1,15 +1,18 @@
 import json
 import click
 from managers.rds_manager import RDSManager
-from managers.elasticache_manager import ElastiCacheManager
 from models.rds_params import RDSParams
+from managers.elasticache_manager import ElastiCacheManager
 from models.elasticache_params import ElastiCacheParams
+from models.savingsplans_params import SavingsPlansParams
+from managers.savingsplans_manager import SavingsPlansManager
+
 
 @click.group(invoke_without_command=True)
 @click.pass_context
 def cli(ctx):
     if ctx.invoked_subcommand is None:
-        click.echo("Please specify a subcommand. Available subcommands: rds")
+        click.echo("Please specify a subcommand.")
         ctx.exit()
 
 # rds subcommand
@@ -22,7 +25,7 @@ def cli(ctx):
 @click.option(
     "--db_instance_class",
     required=True,
-    help="DB instance class (e.g., 'db.m5.large' 'db.r5.xlarge' 'db.t3.medium')"
+    help="DB instance class (e.g., 'db.m5.large' 'db.r5.xlarge' 'db.t3.medium'...)"
 )
 @click.option(
     "--duration",
@@ -48,7 +51,7 @@ def cli(ctx):
 @click.option(
     "--offering_type",
     required=True,
-    help="Offering type (e.g., All Upfront, Partial Upfront, No Upfront)",
+    help="Offering type (e.g., 'All Upfront', 'Partial Upfront', 'No Upfront')",
 )
 @click.option(
     "--reserved_instance_id",
@@ -94,7 +97,7 @@ def rds(
 @click.option(
     "--cache_node_type",
     required=True,
-    help="Cache node type (e.g., 'cache.m5.large' 'cache.r5.xlarge' 'cache.t3.medium')"
+    help="Cache node type (e.g., 'cache.m5.large' 'cache.r5.xlarge' 'cache.t3.medium'...)"
 )
 @click.option(
     "--duration",
@@ -109,7 +112,7 @@ def rds(
 @click.option(
     "--offering_type",
     required=False,
-    help="Offering type (e.g., All Upfront, Partial Upfront, No Upfront)",
+    help="Offering type (e.g., 'All Upfront', 'Partial Upfront', 'No Upfront')",
 )
 @click.option(
     "--reserved_cache_nodes_offering_id",
@@ -142,6 +145,79 @@ def elasticache(
         reserved_cache_node_id=reserved_cache_node_id,
     )
     manager = ElastiCacheManager(region_name=region_name)
+    offerings = manager.get_offering_ids(params)
+    print(json.dumps(offerings, indent=2))
+
+# savingsplans subcommand
+@cli.command()
+@click.option(
+    "--region_name",
+    default="ap-northeast-1",
+    required=True,
+    type=str,
+    help="AWS region name (e.g., 'ap-northeast-1')"
+)
+@click.option(
+    "--commitment",
+    default=0.01,
+    type=float,
+    required=True,
+    help="Commitment (e.g., 0.01)"
+)
+@click.option(
+    "--durations",
+    default=[31536000],
+    multiple=True,
+    type=int,
+    help="Durations in seconds (e.g., 31536000 94608000)"
+)
+@click.option(
+    "--plan_types",
+    default=["Compute"],
+    required=False,
+    multiple=True,
+    type=str,
+    help="Plan type (e.g., 'Compute' 'EC2 Instance' 'EC2 Instance Family' 'Compute Instance' 'EC2 Instance Savings Plan')"
+)
+@click.option(
+    "--offering_id",
+    required=False,
+    type=str,
+    help="Offering ID"
+)
+@click.option(
+    "--payment_options",
+    default=["All Upfront"],
+    required=False,
+    multiple=True,
+    type=str,
+    help="Offering type (e.g., 'All Upfront', 'Partial Upfront', 'No Upfront')"
+)
+@click.option(
+    "--client_token",
+    required=False,
+    type=str,
+    help="Client token"
+)
+def savingsplans(
+    region_name,
+    commitment,
+    durations,
+    plan_types,
+    offering_id,
+    payment_options,
+    client_token,
+):
+    params = SavingsPlansParams(
+        region_name=region_name,
+        commitment=commitment,
+        offering_id=offering_id,
+        durations=durations,
+        plan_types=plan_types,
+        payment_options=payment_options,
+        client_token=client_token,
+    )
+    manager = SavingsPlansManager(region_name=region_name)
     offerings = manager.get_offering_ids(params)
     print(json.dumps(offerings, indent=2))
 
