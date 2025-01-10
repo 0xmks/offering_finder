@@ -1,9 +1,9 @@
 import json
 import click
-from managers.rds_manager import RDSManager
 from models.rds_params import RDSParams
-from managers.elasticache_manager import ElastiCacheManager
+from managers.rds_manager import RDSManager
 from models.elasticache_params import ElastiCacheParams
+from managers.elasticache_manager import ElastiCacheManager
 from models.savingsplans_params import SavingsPlansParams
 from managers.savingsplans_manager import SavingsPlansManager
 
