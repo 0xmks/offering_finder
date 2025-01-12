@@ -1,6 +1,14 @@
-from dataclasses import dataclass, asdict, field
+from dataclasses import dataclass
 from typing import Optional, Dict, Any
-import datetime
+
+@dataclass
+class OpenSearchPurchaseParams:
+    """
+    Data class for common parameters.
+    """
+    region_name: Optional[str] = "ap-northeast-1"
+    quantity: Optional[int] = 1
+    reservation_name: Optional[str] = None
 
 @dataclass
 class OpenSearchParams:
@@ -26,17 +34,13 @@ class OpenSearchParams:
         return params
 
 @dataclass
-class OpenSearchReservedInstance:
+class OpenSearchFilterParams:
     """
-    Data class for OpenSearch reserved instance offerings.
+    Data class for OpenSearch reserved instance offerings filter parameters.
+    https://boto3.amazonaws.com/v1/documentation/api/1.35.8/reference/services/opensearch/client/describe_reserved_instance_offerings.html
     """
-    offering_id: str
-    instance_type: str
-    duration: str
-    fixed_price: float
-    usage_price: float
-    currency_code: str
-    payment_option: str
-    offering_type: str
-    region: str
-    timestamp: str = field(init=False)
+    reserved_instance_offering_id: Optional[str] = None
+    instance_type: Optional[str] = None
+    duration: Optional[int] = None
+    currency_code: Optional[str] = None
+    payment_option: Optional[str] = None

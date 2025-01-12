@@ -23,5 +23,7 @@ class AWSClient:
             return self.client.describe_reserved_cache_nodes_offerings(**params)
         elif self.client.meta.service_model.service_name == "savingsplans":
             return self.client.describe_savings_plans_offerings(**params)
+        elif self.client.meta.service_model.service_name == "opensearch":
+            return self.client.describe_reserved_instance_offerings(**params)
         else:
             raise ValueError("Unsupported service")
