@@ -1,7 +1,7 @@
 import click
 import json
-from models.savingsplans_params import SavingsPlansParams
-from managers.savingsplans_manager import SavingsPlansManager
+from src.offering_finder.models.savingsplans_params import SavingsPlansParams
+from src.offering_finder.managers.savingsplans_manager import SavingsPlansManager
 
 
 # savingsplans subcommand

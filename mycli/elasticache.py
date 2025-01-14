@@ -1,7 +1,7 @@
 import click
 import json
-from models.elasticache_params import ElastiCacheParams
-from managers.elasticache_manager import ElastiCacheManager
+from src.offering_finder.models.elasticache_params import ElastiCacheParams
+from src.offering_finder.managers.elasticache_manager import ElastiCacheManager
 
 
 # elasticache subcommand
@@ -40,7 +40,7 @@ from managers.elasticache_manager import ElastiCacheManager
     required=False,
     help=(
         "Offering type "
-        "(e.g., 'All Upfront', 'Partial Upfront', 'No Upfront')",
+        "(e.g., 'All Upfront', 'Partial Upfront', 'No Upfront')"
     )
 )
 @click.option(

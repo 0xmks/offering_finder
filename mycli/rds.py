@@ -1,7 +1,7 @@
 import click
 import json
-from models.rds_params import RDSParams
-from managers.rds_manager import RDSManager
+from src.offering_finder.models.rds_params import RDSParams
+from src.offering_finder.managers.rds_manager import RDSManager
 
 # rds subcommand
 @click.command()
@@ -22,7 +22,7 @@ from managers.rds_manager import RDSManager
 )
 @click.option(
     "--quantity",
-    required=False,
+    required=True,
     type=int,
     help="Quantity (e.g., 2)"
 )

@@ -1,11 +1,11 @@
 import click
 import json
-from models.opensearch_params import (
+from src.offering_finder.models.opensearch_params import (
     OpenSearchParams,
     OpenSearchFilterParams,
     OpenSearchPurchaseParams
 )
-from managers.opensearch_manager import OpenSearchManager
+from src.offering_finder.managers.opensearch_manager import OpenSearchManager
 
 
 # Opensearch subcommand
