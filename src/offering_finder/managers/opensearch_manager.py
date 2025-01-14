@@ -7,10 +7,10 @@ from offering_finder.models.opensearch_params import OpenSearchParams, OpenSearc
 
 class OpenSearchManager:
     def __init__(
-        self, 
+        self,
         region_name: str
     ) -> None:
-        self.client = AWSClient("opensearch",region_name)
+        self.client = AWSClient("opensearch", region_name)
 
     def generate_purchase_command(
             self,
@@ -78,8 +78,8 @@ class OpenSearchManager:
         return result
 
     def add_keys_to_offerings(
-        self, 
-        offerings: List[Dict[str, Any]], 
+        self,
+        offerings: List[Dict[str, Any]],
         purchase_params: OpenSearchPurchaseParams
     ) -> List[Dict[str, Any]]:
         result = []

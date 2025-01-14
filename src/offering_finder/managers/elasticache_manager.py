@@ -8,7 +8,7 @@ from offering_finder.models.elasticache_params import ElastiCacheParams
 
 class ElastiCacheManager:
     def __init__(
-        self, 
+        self,
         region_name: str
     ) -> None:
         self.client = AWSClient("elasticache",region_name)
@@ -34,8 +34,8 @@ class ElastiCacheManager:
         return command
 
     def add_keys_to_offering(
-            self, 
-            offering: Dict[str, Any], 
+            self,
+            offering: Dict[str, Any],
             params: ElastiCacheParams
     ) -> Dict[str, Any]:
         try:
@@ -59,7 +59,7 @@ class ElastiCacheManager:
         return offering
 
     def get_offering_ids(
-            self, 
+            self,
             params: ElastiCacheParams
     ) -> List[Dict[str, Any]]:
         try:

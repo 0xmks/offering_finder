@@ -3,6 +3,7 @@ import json
 from models.elasticache_params import ElastiCacheParams
 from managers.elasticache_manager import ElastiCacheManager
 
+
 # elasticache subcommand
 @click.command()
 @click.option(
@@ -19,11 +20,14 @@ from managers.elasticache_manager import ElastiCacheManager
 @click.option(
     "--cache_node_type",
     required=True,
-    help="Cache node type (e.g., 'cache.m5.large' 'cache.r5.xlarge' 'cache.t3.medium'...)"
+    help=(
+        "Cache node type "
+        "(e.g., 'cache.m5.large' 'cache.r5.xlarge' 'cache.t3.medium'...)"
+    )
 )
 @click.option(
     "--duration",
-    required=False, 
+    required=False,
     help="Duration (e.g., 31536000 94608000)"
 )
 @click.option(
@@ -34,7 +38,10 @@ from managers.elasticache_manager import ElastiCacheManager
 @click.option(
     "--offering_type",
     required=False,
-    help="Offering type (e.g., 'All Upfront', 'Partial Upfront', 'No Upfront')",
+    help=(
+        "Offering type "
+        "(e.g., 'All Upfront', 'Partial Upfront', 'No Upfront')",
+    )
 )
 @click.option(
     "--reserved_cache_nodes_offering_id",

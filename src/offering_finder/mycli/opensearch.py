@@ -1,6 +1,10 @@
 import click
 import json
-from models.opensearch_params import OpenSearchParams, OpenSearchFilterParams, OpenSearchPurchaseParams
+from models.opensearch_params import (
+    OpenSearchParams,
+    OpenSearchFilterParams,
+    OpenSearchPurchaseParams
+)
 from managers.opensearch_manager import OpenSearchManager
 
 
@@ -52,7 +56,10 @@ from managers.opensearch_manager import OpenSearchManager
     "--reservation_name",
     required=False,
     type=str,
-    help="Reservation name A customer-specified identifier to track this reservation. (e.g., 'my-reservation') (optional)"
+    help=(
+        "Reservation name A customer-specified identifier to track this reservation. "
+        "(e.g., 'my-reservation') (optional)"
+    )
 )
 def opensearch(
     region_name,
@@ -80,7 +87,7 @@ def opensearch(
         currency_code=currency_code,
         payment_option=payment_option,
     )
-    filterd_offerings = manager.filter_offerings(all_offerings, filter_params)
+    filter_offerings = manager.filter_offerings(all_offerings, filter_params)
 
     """ 3. Add Purchase Command and Purchase Offering """
     purchase_params = OpenSearchPurchaseParams(
@@ -88,5 +95,5 @@ def opensearch(
         quantity=quantity,
         reservation_name=reservation_name,
     )
-    result = manager.add_keys_to_offerings(filterd_offerings,purchase_params)
+    result = manager.add_keys_to_offerings(filter_offerings, purchase_params)
     print(json.dumps(result, indent=2))

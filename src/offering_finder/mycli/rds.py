@@ -7,7 +7,7 @@ from managers.rds_manager import RDSManager
 @click.command()
 @click.option(
     "--product_description",
-    required=True, 
+    required=True,
     help="Product description (e.g., 'MySQL' 'PostgreSQL' 'aurora mysql' 'aurora postgresql')"
 )
 @click.option(
@@ -17,7 +17,7 @@ from managers.rds_manager import RDSManager
 )
 @click.option(
     "--duration",
-    required=True, 
+    required=True,
     help="Duration (e.g., 31536000)"
 )
 @click.option(
@@ -32,8 +32,8 @@ from managers.rds_manager import RDSManager
     help="AWS region name (e.g., 'ap-northeast-1')"
 )
 @click.option(
-    "--multi_az", 
-    is_flag=True, 
+    "--multi_az",
+    is_flag=True,
     help="Specify if the instance should be Multi-AZ"
 )
 @click.option(
