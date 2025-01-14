@@ -20,37 +20,50 @@ from src.offering_finder.managers.opensearch_manager import OpenSearchManager
     "--instance_type",
     required=False,
     type=str,
-    help="Instance type (e.g., 'r5.large.search' 'm5.xlarge.search' 't3.medium.search'...) (optional)"
+    help=(
+        "Instance type "
+        "(e.g., 'r5.large.search' 'm5.xlarge.search' 't3.medium.search'...)"
+    )
 )
 @click.option(
     "--duration",
     required=False,
     type=int,
-    help="Duration (e.g., 31536000, 94608000) (optional)"
+    help=(
+        "Duration (e.g., 31536000, 94608000)"
+    )
 )
 @click.option(
     "--payment_option",
     required=False,
     type=str,
-    help="Offering type ('All_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT') (optional)"
+    help=(
+        "Offering type ('All_UPFRONT', 'PARTIAL_UPFRONT', 'NO_UPFRONT')"
+    )
 )
 @click.option(
     "--currency_code",
     required=False,
     type=str,
-    help="Currency code ('USD' 'CNY') (optional)"
+    help=(
+        "Currency code ('USD' 'CNY')"
+    )
 )
 @click.option(
     "--reserved_instance_offering_id",
     required=False,
     type=str,
-    help="ReservedInstanceOfferingId The ID of the Reserved Instance offering to purchase. (optional)"
+    help=(
+        "ReservedInstanceOfferingId The ID of the Reserved Instance offering to purchase."
+    )
 )
 @click.option(
     "--quantity",
     required=True,
     type=int,
-    help="Quantity The number of OpenSearch instances to reserve. (e.g., 1) (optional)"
+    help=(
+        "Quantity The number of OpenSearch instances to reserve. (e.g., 1)"
+    )
 )
 @click.option(
     "--reservation_name",

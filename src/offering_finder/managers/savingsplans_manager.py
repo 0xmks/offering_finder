@@ -8,10 +8,10 @@ from offering_finder.models.savingsplans_params import SavingsPlansParams
 
 class SavingsPlansManager:
     def __init__(
-        self, 
+        self,
         region_name: str
     ) -> None:
-        self.client = AWSClient("savingsplans",region_name)
+        self.client = AWSClient("savingsplans", region_name)
 
     def generate_purchase_command(
         self,
@@ -34,8 +34,8 @@ class SavingsPlansManager:
         return command
 
     def add_keys_to_offering(
-            self, 
-            offering: Dict[str, Any], 
+            self,
+            offering: Dict[str, Any],
             params: SavingsPlansParams
     ) -> Dict[str, Any]:
         try:
@@ -59,7 +59,7 @@ class SavingsPlansManager:
         return offering
 
     def get_offering_ids(
-            self, 
+            self,
             params: SavingsPlansParams
     ) -> List[Dict[str, Any]]:
         try:

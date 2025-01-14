@@ -5,6 +5,7 @@ import boto3
 from offering_finder.clients.AWSClient import AWSClient
 from offering_finder.models.opensearch_params import OpenSearchParams, OpenSearchFilterParams, OpenSearchPurchaseParams
 
+
 class OpenSearchManager:
     def __init__(
         self,

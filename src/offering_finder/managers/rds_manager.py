@@ -8,7 +8,7 @@ from offering_finder.models.rds_params import RDSParams
 
 class RDSManager:
     def __init__(
-        self, 
+        self,
         region_name: str
     ) -> None:
         self.client = AWSClient("rds",region_name)
@@ -34,8 +34,8 @@ class RDSManager:
         return command
 
     def add_keys_to_offering(
-            self, 
-            offering: Dict[str, Any], 
+            self,
+            offering: Dict[str, Any],
             params: RDSParams
     ) -> Dict[str, Any]:
         try:
@@ -59,7 +59,7 @@ class RDSManager:
         return offering
 
     def get_offering_ids(
-            self, 
+            self,
             params: RDSParams
     ) -> List[Dict[str, Any]]:
         try:

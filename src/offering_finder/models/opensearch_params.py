@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
 
+
 @dataclass
 class OpenSearchPurchaseParams:
     """
@@ -9,6 +10,7 @@ class OpenSearchPurchaseParams:
     region_name: Optional[str] = "ap-northeast-1"
     quantity: Optional[int] = 1
     reservation_name: Optional[str] = None
+
 
 @dataclass
 class OpenSearchParams:
@@ -32,6 +34,7 @@ class OpenSearchParams:
         if self.next_token:
             params["NextToken"] = self.next_token
         return params
+
 
 @dataclass
 class OpenSearchFilterParams:
