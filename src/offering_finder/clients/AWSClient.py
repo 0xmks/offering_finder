@@ -4,15 +4,15 @@ from typing import Any, Dict
 
 class AWSClient:
     def __init__(
-            self, 
-            service_name: str, 
-            region_name: str
+        self,
+        service_name: str,
+        region_name: str
     ) -> None:
         self.client = boto3.client(service_name, region_name=region_name)
 
     def describe_offerings(
-            self, 
-            params: Dict[str, Any]
+        self,
+        params: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
         Wrapper for AWS describe_reserved_db_instances_offerings or describe_reserved_cache_nodes_offerings API.
@@ -23,5 +23,7 @@ class AWSClient:
             return self.client.describe_reserved_cache_nodes_offerings(**params)
         elif self.client.meta.service_model.service_name == "savingsplans":
             return self.client.describe_savings_plans_offerings(**params)
+        elif self.client.meta.service_model.service_name == "opensearch":
+            return self.client.describe_reserved_instance_offerings(**params)
         else:
             raise ValueError("Unsupported service")

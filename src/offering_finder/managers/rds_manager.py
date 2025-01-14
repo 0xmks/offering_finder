@@ -3,51 +3,51 @@ import logging
 from typing import Any, Dict, List, Optional
 import boto3
 from offering_finder.clients.AWSClient import AWSClient
-from offering_finder.models.savingsplans_params import SavingsPlansParams
+from offering_finder.models.rds_params import RDSParams
 
 
-class SavingsPlansManager:
+class RDSManager:
     def __init__(
-        self, 
+        self,
         region_name: str
     ) -> None:
-        self.client = AWSClient("savingsplans",region_name)
+        self.client = AWSClient("rds",region_name)
 
     def generate_purchase_command(
         self,
         offering_id: str,
         region_name: str,
-        commitment: int,
-        client_token: Optional[str] = None
+        quantity: int,
+        reserved_instance_id: Optional[str] = None
     ) -> str:
         """
-        Generate the AWS CLI command to purchase a reserved cache node offering.
+        Generate the AWS CLI command to purchase a reserved DB instance offering.
         """
         command = (
-            f"aws savingsplans create-savings-plan "
+            f"aws rds purchase-reserved-db-instances-offering "
             f"--region {region_name} "
-            f"--savings-plan-offering-id {offering_id} "
-            f"--commitment {commitment}"
+            f"--reserved-db-instances-offering-id {offering_id} "
+            f"--db-instance-count {quantity}"
         )
-        if client_token:
-            command += f" --client-token {client_token}"
+        if reserved_instance_id:
+            command += f" --reserved-db-instance-id {reserved_instance_id}"
         return command
 
     def add_keys_to_offering(
-            self, 
-            offering: Dict[str, Any], 
-            params: SavingsPlansParams
+            self,
+            offering: Dict[str, Any],
+            params: RDSParams
     ) -> Dict[str, Any]:
         try:
-            if params.commitment:
-                offering["OrderCommitment"] = params.commitment
-                offering["OrderEstimatedAmount"] = float(offering["durationSeconds"]) * params.commitment
+            if params.quantity:
+                offering["OrderQuantity"] = params.quantity
+                offering["OrderEstimatedAmount"] = float(offering["FixedPrice"]) * params.quantity
             offering["Timestamp"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
             offering["PurchaseCommand"] = self.generate_purchase_command(
-                offering["offeringId"],
+                offering["ReservedDBInstancesOfferingId"],
                 params.region_name,
-                params.commitment,
-                params.client_token,
+                params.quantity,
+                params.reserved_instance_id,
             )
             return offering
         except KeyError as e:
@@ -59,21 +59,20 @@ class SavingsPlansManager:
         return offering
 
     def get_offering_ids(
-            self, 
-            params: SavingsPlansParams
+            self,
+            params: RDSParams
     ) -> List[Dict[str, Any]]:
         try:
             aws_params = params.to_dict()
             result = []
             while True:
                 response = self.client.describe_offerings(aws_params)
-                offerings = response.get("searchResults", [])
+                offerings = response.get("ReservedDBInstancesOfferings", [])
                 for offering in offerings:
                     offering = self.add_keys_to_offering(offering, params)
                 result.extend(offerings)
-                if response.get("nextToken"):
-                    """ 次ページが無い場合も 'nextToken': '' という形で返ってくるため、空文字ではない事をチェックする"""
-                    aws_params["nextToken"] = response["nextToken"]
+                if "Marker" in response:
+                    aws_params["Marker"] = response["Marker"]
                 else:
                     break
             return result
