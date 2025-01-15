@@ -7,18 +7,15 @@ from offering_finder.models.rds_params import RDSParams
 
 
 class RDSManager:
-    def __init__(
-        self,
-        region_name: str
-    ) -> None:
-        self.client = AWSClient("rds",region_name)
+    def __init__(self, region_name: str) -> None:
+        self.client = AWSClient("rds", region_name)
 
     def generate_purchase_command(
         self,
         offering_id: str,
         region_name: str,
         quantity: int,
-        reserved_instance_id: Optional[str] = None
+        reserved_instance_id: Optional[str] = None,
     ) -> str:
         """
         Generate the AWS CLI command to purchase a reserved DB instance offering.
@@ -34,15 +31,17 @@ class RDSManager:
         return command
 
     def add_keys_to_offering(
-            self,
-            offering: Dict[str, Any],
-            params: RDSParams
+        self, offering: Dict[str, Any], params: RDSParams
     ) -> Dict[str, Any]:
         try:
             if params.quantity:
                 offering["OrderQuantity"] = params.quantity
-                offering["OrderEstimatedAmount"] = float(offering["FixedPrice"]) * params.quantity
-            offering["Timestamp"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                offering["OrderEstimatedAmount"] = (
+                    float(offering["FixedPrice"]) * params.quantity
+                )
+            offering["Timestamp"] = datetime.datetime.now(
+                datetime.timezone.utc
+            ).isoformat()
             offering["PurchaseCommand"] = self.generate_purchase_command(
                 offering["ReservedDBInstancesOfferingId"],
                 params.region_name,
@@ -58,10 +57,7 @@ class RDSManager:
             logging.error(f"An unexpected error occurred: {e}")
         return offering
 
-    def get_offering_ids(
-            self,
-            params: RDSParams
-    ) -> List[Dict[str, Any]]:
+    def get_offering_ids(self, params: RDSParams) -> List[Dict[str, Any]]:
         try:
             aws_params = params.to_dict()
             result = []

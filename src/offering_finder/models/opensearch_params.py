@@ -10,7 +10,7 @@ class OpenSearchPurchaseParams(BaseModel):
     """
 
     region_name: Optional[str] = None
-    quantity: Optional[int] = None
+    quantity: Optional[int] = 1
     reservation_name: Optional[str] = None
     purchase_profile: Optional[str] = None
 
@@ -34,6 +34,6 @@ class OpenSearchFilterParams(BaseModel):
 
     ReservedInstanceOfferingId: Optional[str] = None
     InstanceType: Optional[str] = None
-    Duration: Optional[int] = None
-    CurrencyCode: Optional[str] = None
+    Duration: Optional[int] = 31536000
+    CurrencyCode: Optional[str] = "USD"
     PaymentOption: Optional[str] = None
