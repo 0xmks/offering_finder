@@ -3,54 +3,57 @@ import logging
 from typing import Any, Dict, List, Optional
 import boto3
 from offering_finder.clients.AWSClient import AWSClient
-from offering_finder.models.opensearch_params import OpenSearchParams, OpenSearchFilterParams, OpenSearchPurchaseParams
+from offering_finder.models.opensearch_params import (
+    OpenSearchParams,
+    OpenSearchFilterParams,
+    OpenSearchPurchaseParams,
+)
 
 
 class OpenSearchManager:
-    def __init__(
-        self,
-        region_name: str
-    ) -> None:
+    def __init__(self, region_name: str) -> None:
         self.client = AWSClient("opensearch", region_name)
 
     def generate_purchase_command(
-            self,
-            offering_id: str,
-            region_name: str,
-            quantity: int,
-            reservation_name: Optional[str] = None,
-        ) -> str:
-            """
-            Generate the AWS CLI command to purchase a reserved instance offering.
-            https://docs.aws.amazon.com/cli/latest/reference/opensearch/purchase-reserved-instance-offering.html
-            """
-            command = (
-                f"aws opensearch purchase-reserved-instance-offering "
-                f"--region {region_name} "
-                f"--reserved-instance-offering-id {offering_id} "
-                f"--instance-count {quantity} "
-            )
-            if reservation_name:
-                command += f" --reservation-name {reservation_name}"
-            return command
-
-    def get_offering_ids(
         self,
-        params: OpenSearchParams
-    ) -> List[str]:
+        offering_id: str,
+        region_name: str,
+        quantity: int,
+        reservation_name: Optional[str] = None,
+        purchase_profile: Optional[str] = None,
+    ) -> str:
+        """
+        Generate the AWS CLI command to purchase a reserved instance offering.
+        https://docs.aws.amazon.com/cli/latest/reference/opensearch/purchase-reserved-instance-offering.html
+        """
+        command = ""
+        if purchase_profile:
+            command += f"AWS_PROFILE={purchase_profile} "
+        command += (
+            f"aws opensearch purchase-reserved-instance-offering"
+            f" --reserved-instance-offering-id {offering_id}"
+            f" --instance-count {quantity}"
+        )
+        if region_name:
+            command += f" --region {region_name}"
+        if reservation_name:
+            command += f" --reservation-name {reservation_name}"
+        return command
+
+    def get_offering_ids(self, params: OpenSearchParams) -> List[str]:
         """
         Get the list of OpenSearch reserved instance offering IDs.
         https://boto3.amazonaws.com/v1/documentation/api/1.35.8/reference/services/opensearch/client/describe_reserved_instance_offerings.html
         """
         try:
-            aws_params = params.to_dict()
+            fetch_params = params.model_dump(exclude_none=True)
             result = []
             while True:
-                response = self.client.describe_offerings(aws_params)
+                response = self.client.describe_offerings(fetch_params)
                 offerings = response.get("ReservedInstanceOfferings", [])
                 result.extend(offerings)
                 if "NextToken" in response:
-                    aws_params["NextToken"] = response["NextToken"]
+                    fetch_params["NextToken"] = response["NextToken"]
                 else:
                     break
             return result
@@ -59,9 +62,7 @@ class OpenSearchManager:
             return []
 
     def filter_offerings(
-        self,
-        offerings: List[Dict[str, Any]],
-        filter_params: OpenSearchFilterParams
+        self, offerings: List[Dict[str, Any]], filter_params: OpenSearchFilterParams
     ) -> List[Dict[str, Any]]:
         """
         Filter the offerings to match the specified filter parameters.
@@ -69,32 +70,51 @@ class OpenSearchManager:
         result = []
         for offering in offerings:
             if (
-                (filter_params.reserved_instance_offering_id is None or offering["ReservedInstanceOfferingId"] == filter_params.reserved_instance_offering_id) and
-                (filter_params.instance_type is None or offering["InstanceType"] == filter_params.instance_type) and
-                (filter_params.duration is None or int(offering["Duration"]) == filter_params.duration) and
-                (filter_params.currency_code is None or offering["CurrencyCode"] == filter_params.currency_code) and
-                (filter_params.payment_option is None or offering["PaymentOption"] == filter_params.payment_option)
+                (
+                    filter_params.ReservedInstanceOfferingId is None
+                    or offering["ReservedInstanceOfferingId"]
+                    == filter_params.ReservedInstanceOfferingId
+                )
+                and (
+                    filter_params.InstanceType is None
+                    or offering["InstanceType"] == filter_params.InstanceType
+                )
+                and (
+                    filter_params.Duration is None
+                    or int(offering["Duration"]) == filter_params.Duration
+                )
+                and (
+                    filter_params.CurrencyCode is None
+                    or offering["CurrencyCode"] == filter_params.CurrencyCode
+                )
+                and (
+                    filter_params.PaymentOption is None
+                    or offering["PaymentOption"] == filter_params.PaymentOption
+                )
             ):
                 result.append(offering)
         return result
 
     def add_keys_to_offerings(
-        self,
-        offerings: List[Dict[str, Any]],
-        purchase_params: OpenSearchPurchaseParams
+        self, offerings: List[Dict[str, Any]], purchase_params: OpenSearchPurchaseParams
     ) -> List[Dict[str, Any]]:
         result = []
         for offering in offerings:
             try:
                 if purchase_params.quantity:
                     offering["OrderQuantity"] = purchase_params.quantity
-                    offering["OrderEstimatedAmount"] = float(offering["FixedPrice"]) * purchase_params.quantity
-                offering["Timestamp"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                    offering["OrderEstimatedAmount"] = (
+                        float(offering["FixedPrice"]) * purchase_params.quantity
+                    )
+                offering["Timestamp"] = datetime.datetime.now(
+                    datetime.timezone.utc
+                ).isoformat()
                 offering["PurchaseCommand"] = self.generate_purchase_command(
-                    offering["ReservedInstanceOfferingId"],
-                    purchase_params.region_name,
-                    purchase_params.quantity,
-                    purchase_params.reservation_name,
+                    offering_id=offering["ReservedInstanceOfferingId"],
+                    purchase_profile=purchase_params.purchase_profile,
+                    region_name=purchase_params.region_name,
+                    quantity=purchase_params.quantity,
+                    reservation_name=purchase_params.reservation_name,
                 )
                 result.append(offering)
             except KeyError as e:
