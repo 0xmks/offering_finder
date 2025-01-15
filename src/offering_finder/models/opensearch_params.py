@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class OpenSearchPurchaseParams(BaseModel):
     """
     Data class for common parameters.
-    https://docs.aws.amazon.com/cli/latest/reference/opensearch/purchase-reserved-instance-offering.html
+    https://awscli.amazonaws.com/v2/documentation/api/latest/reference/opensearch/purchase-reserved-instance-offering.html
     """
 
     region_name: Optional[str] = None
