@@ -1,41 +1,29 @@
-from dataclasses import dataclass
-from typing import Optional, Dict, Any
+from typing import Optional
+from pydantic import BaseModel
 
 
-@dataclass
-class ElastiCacheParams:
+class ElastiCachePurchaseParams(BaseModel):
     """
-    Data class for ElastiCache parameters.
-    https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeReservedCacheNodes.html
+    Data class for common parameters.
+    https://awscli.amazonaws.com/v2/documentation/api/latest/reference/elasticache/purchase-reserved-cache-nodes-offering.html
     """
-    region_name: Optional[str] = "ap-northeast-1"
+
+    purchase_profile: Optional[str] = None
+    region_name: Optional[str] = None
     quantity: Optional[int] = 1
-    marker: Optional[str] = None
-    reserved_cache_nodes_offering_id: Optional[str] = None
-    cache_node_type: Optional[str] = None
-    duration: Optional[str] = '31536000'
-    product_description: Optional[str] = None
-    offering_type: Optional[str] = 'All Upfront'
-    max_records: Optional[int] = 100
     reserved_cache_node_id: Optional[str] = None
 
-    def to_dict(self) -> Dict[str, Any]:
-        """
-        Converts the parameters to a dictionary for AWS API calls.
-        """
-        params = {}
-        if self.reserved_cache_nodes_offering_id:
-            params["ReservedCacheNodesOfferingId"] = self.reserved_cache_nodes_offering_id
-        if self.cache_node_type:
-            params["CacheNodeType"] = self.cache_node_type
-        if self.duration:
-            params["Duration"] = self.duration
-        if self.product_description:
-            params["ProductDescription"] = self.product_description
-        if self.offering_type:
-            params["OfferingType"] = self.offering_type
-        if self.max_records:
-            params["MaxRecords"] = self.max_records
-        if self.marker:
-            params["Marker"] = self.marker
-        return params
+
+class ElastiCacheParams(BaseModel):
+    """
+    Data class for ElastiCache parameters.
+    https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/elasticache/client/describe_reserved_cache_nodes_offerings.html
+    """
+
+    ReservedCacheNodesOfferingId: Optional[str] = None
+    CacheNodeType: Optional[str] = None
+    Duration: Optional[str] = "31536000"
+    ProductDescription: Optional[str] = None
+    OfferingType: Optional[str] = "All Upfront"
+    MaxRecords: Optional[int] = 100
+    Marker: Optional[str] = None
