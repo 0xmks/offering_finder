@@ -52,7 +52,7 @@ class SavingsPlansManager:
             try:
                 offering["OrderCommitment"] = params.commitment
                 offering["OrderEstimatedAmount"] = (
-                    float(offering["durationSeconds"]) * params.commitment
+                    float(offering["durationSeconds"] / 60 / 60) * params.commitment
                 )
                 offering["Timestamp"] = datetime.datetime.now(
                     datetime.timezone.utc
@@ -73,7 +73,7 @@ class SavingsPlansManager:
                 logging.error(f"Value error: {e}")
             except Exception as e:
                 logging.error(f"An unexpected error occurred: {e}")
-        return offering
+        return result
 
     def get_offerings(self, params: SavingsPlansParams) -> List[Dict[str, Any]]:
         try:

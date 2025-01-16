@@ -62,7 +62,7 @@ class OpenSearchManager:
             return []
 
     def filter_offerings(
-        self, offerings: List[Dict[str, Any]], filter_params: OpenSearchFilterParams
+        self, offerings: List[Dict[str, Any]], params: OpenSearchFilterParams
     ) -> List[Dict[str, Any]]:
         """
         Filter the offerings to match the specified filter parameters.
@@ -71,25 +71,25 @@ class OpenSearchManager:
         for offering in offerings:
             if (
                 (
-                    filter_params.ReservedInstanceOfferingId is None
+                    params.ReservedInstanceOfferingId is None
                     or offering["ReservedInstanceOfferingId"]
-                    == filter_params.ReservedInstanceOfferingId
+                    == params.ReservedInstanceOfferingId
                 )
                 and (
-                    filter_params.InstanceType is None
-                    or offering["InstanceType"] == filter_params.InstanceType
+                    params.InstanceType is None
+                    or offering["InstanceType"] == params.InstanceType
                 )
                 and (
-                    filter_params.Duration is None
-                    or int(offering["Duration"]) == filter_params.Duration
+                    params.Duration is None
+                    or int(offering["Duration"]) == int(params.Duration)
                 )
                 and (
-                    filter_params.CurrencyCode is None
-                    or offering["CurrencyCode"] == filter_params.CurrencyCode
+                    params.CurrencyCode is None
+                    or offering["CurrencyCode"] == params.CurrencyCode
                 )
                 and (
-                    filter_params.PaymentOption is None
-                    or offering["PaymentOption"] == filter_params.PaymentOption
+                    params.PaymentOption is None
+                    or offering["PaymentOption"] == params.PaymentOption
                 )
             ):
                 result.append(offering)

@@ -13,10 +13,10 @@ from src.offering_finder.managers.rds_manager import RDSManager
     help="Purchase command set a named profile (e.g., 'default' 'my-profile')",
 )
 @click.option(
-    "--reserved_instance_offering_id",
+    "--reserved_instances_offering_id",
     required=False,
     type=str,
-    help="Reserved instance offering ID",
+    help="Reserved instances offering ID",
 )
 @click.option(
     "--product_description",
@@ -31,7 +31,7 @@ from src.offering_finder.managers.rds_manager import RDSManager
     help="DB instance class (e.g., 'db.m5.large' 'db.r5.xlarge' 'db.t3.medium'...)",
 )
 @click.option(
-    "--duration", required=True, type=str, help="Duration (e.g., '31536000' '94608000')"
+    "--duration", required=True, type=str, help="Duration (e.g., 31536000 94608000)"
 )
 @click.option("--quantity", required=True, type=int, help="Quantity (e.g., 2)")
 @click.option(
@@ -58,7 +58,7 @@ from src.offering_finder.managers.rds_manager import RDSManager
 def rds(
     purchase_profile,
     region_name,
-    reserved_instance_offering_id,
+    reserved_instances_offering_id,
     quantity,
     product_description,
     db_instance_class,
@@ -71,7 +71,7 @@ def rds(
     manager = RDSManager(region_name=region_name)
     """ 1. Get all offerings """
     params = RDSParams(
-        ReservedDBInstanceOfferingId=reserved_instance_offering_id,
+        ReservedDBInstancesOfferingId=reserved_instances_offering_id,
         ProductDescription=product_description,
         DBInstanceClass=db_instance_class,
         Duration=duration,

@@ -15,11 +15,11 @@ class ElastiCacheManager:
 
     def generate_purchase_command(
         self,
-        purchase_profile: Optional[str],
+        purchase_profile: str,
         region_name: str,
         offering_id: str,
         quantity: int,
-        reserved_cache_node_id: Optional[str] = None,
+        reserved_cache_node_id: str,
     ) -> str:
         """
         Generate the AWS CLI command to purchase a reserved cache node offering.
@@ -27,7 +27,7 @@ class ElastiCacheManager:
         command = ""
         if purchase_profile:
             command += f"AWS_PROFILE={purchase_profile} "
-        command = (
+        command += (
             f"aws elasticache purchase-reserved-cache-nodes-offering "
             f"--region {region_name} "
             f"--reserved-cache-nodes-offering-id {offering_id} "

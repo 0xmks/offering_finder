@@ -20,7 +20,7 @@ class RDSParams(BaseModel):
     https://boto3.amazonaws.com/v1/documentation/api/1.35.6/reference/services/rds/client/describe_reserved_db_instances_offerings.html
     """
 
-    ReservedDBInstanceOfferingId: Optional[str] = None
+    ReservedDBInstancesOfferingId: Optional[str] = None
     DBInstanceClass: Optional[str] = None
     Duration: Optional[str] = "31536000"
     ProductDescription: Optional[str] = None
