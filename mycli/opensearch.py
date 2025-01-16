@@ -32,7 +32,10 @@ from src.offering_finder.managers.opensearch_manager import OpenSearchManager
     ),
 )
 @click.option(
-    "--duration", required=False, type=int, help=("Duration (e.g., 31536000, 94608000)")
+    "--duration",
+    required=False,
+    type=int,
+    help=("The duration, in seconds. (e.g., 31536000, 94608000)"),
 )
 @click.option(
     "--payment_option",
@@ -77,7 +80,6 @@ def opensearch(
     quantity,
     reservation_name,
 ):
-    print(purchase_profile)
     """Retrieve OpenSearch offerings"""
     """ 1. Get all offerings """
     params_all = OpenSearchParams(
