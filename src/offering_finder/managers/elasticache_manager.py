@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 import boto3
 from offering_finder.clients.AWSClient import AWSClient
 from offering_finder.models.elasticache_params import (

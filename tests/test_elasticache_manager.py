@@ -1,7 +1,6 @@
 import pytest
 from src.offering_finder.managers.elasticache_manager import ElastiCacheManager
 from src.offering_finder.models.elasticache_params import ElastiCacheParams
-from unittest.mock import MagicMock
 
 def test_add_keys_to_offering_success():
     manager = ElastiCacheManager(region_name="us-west-2")
