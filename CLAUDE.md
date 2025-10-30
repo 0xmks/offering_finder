@@ -147,8 +147,12 @@ while True:
 - ✅ AWSClient 統一ラッパー
 
 ### テスト状況
+- ✅ RDS Manager のテストコードあり (`test_rds_manager.py`)
 - ✅ ElastiCache Manager のテストコードあり (`test_elasticache_manager.py`)
-- ⚠️ 他のマネージャーのテストコードは未実装
+- ✅ Savings Plans Manager のテストコードあり (`test_savingsplans_manager.py`)
+- ✅ OpenSearch Manager のテストコードあり (`test_opensearch_manager.py`)
+- ✅ AWSClient のテストコードあり (`test_awsclient.py`)
+- ✅ 全31テストがパス
 
 ### 既知の問題・改善点
 
@@ -157,11 +161,13 @@ while True:
 
 **解決**: PR #4 ([0756509](https://github.com/0xmks/offering_finder/commit/0756509)) で修正済み
 
-#### 2. テストカバレッジ不足
-- RDS Manager: テストなし
-- Savings Plans Manager: テストなし
-- OpenSearch Manager: テストなし
-- AWSClient: テストなし
+#### 2. ~~テストカバレッジ不足~~ ✅ 解決済み
+~~RDS Manager、Savings Plans Manager、OpenSearch Manager、AWSClientのテストが未実装~~
+
+**解決**: PR #5 ([976ac07](https://github.com/0xmks/offering_finder/commit/976ac07)) で全Managerのユニットテストを追加
+- 全31テストがパス
+- AWS公式ドキュメントに基づくテストデータを使用
+- モックを使用してAWS APIに依存しないテスト
 
 #### 3. エラーハンドリング
 - 現状はログ出力のみ
@@ -172,7 +178,7 @@ while True:
 
 ### 優先度: 高
 1. ~~**RDSManager.add_keys_to_offerings のバグ修正**~~ ✅ 解決済み
-2. **全Managerのユニットテスト実装**
+2. ~~**全Managerのユニットテスト実装**~~ ✅ 解決済み
 3. **統合テストの追加**（モック使用）
 
 ### 優先度: 中
