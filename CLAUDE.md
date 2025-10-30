@@ -152,16 +152,10 @@ while True:
 
 ### 既知の問題・改善点
 
-#### 1. RDSManager のバグ ([rds_manager.py:64](src/offering_finder/managers/rds_manager.py#L64))
-```python
-def add_keys_to_offerings(self, offerings: Dict[str, Any], params: RDSPurchaseParams) -> Dict[str, Any]:
-    result = []
-    for offering in offerings:
-        # ... 処理 ...
-        return result  # ← ループの1回目でreturnしてしまう（インデントミス）
-```
-**問題**: ループ内でreturnしているため、最初の1件しか処理されない
-**修正方法**: returnをforループの外に出す
+#### 1. ~~RDSManager のバグ~~ ✅ 解決済み
+~~ループ内でreturnしているため、最初の1件しか処理されない問題~~
+
+**解決**: PR #4 ([0756509](https://github.com/0xmks/offering_finder/commit/0756509)) で修正済み
 
 #### 2. テストカバレッジ不足
 - RDS Manager: テストなし
@@ -177,7 +171,7 @@ def add_keys_to_offerings(self, offerings: Dict[str, Any], params: RDSPurchasePa
 ## 改善提案
 
 ### 優先度: 高
-1. **RDSManager.add_keys_to_offerings のバグ修正**
+1. ~~**RDSManager.add_keys_to_offerings のバグ修正**~~ ✅ 解決済み
 2. **全Managerのユニットテスト実装**
 3. **統合テストの追加**（モック使用）
 
@@ -223,4 +217,4 @@ def add_keys_to_offerings(self, offerings: Dict[str, Any], params: RDSPurchasePa
 Unlicense - パブリックドメイン
 
 ## 最終更新
-2025-01-17
+2025-01-30
