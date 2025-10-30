@@ -61,7 +61,7 @@ class RDSManager:
                 logging.error(f"Value error: {e}")
             except Exception as e:
                 logging.error(f"An unexpected error occurred: {e}")
-            return result
+        return result
 
     def get_offerings(self, params: RDSParams) -> List[Dict[str, Any]]:
         try:
