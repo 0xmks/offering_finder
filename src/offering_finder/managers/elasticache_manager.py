@@ -1,7 +1,7 @@
 import datetime
 import logging
 from typing import Any, Dict, List
-import boto3
+from botocore.exceptions import BotoCoreError, ClientError
 from offering_finder.clients.AWSClient import AWSClient
 from offering_finder.models.elasticache_params import (
     ElastiCacheParams,
@@ -59,11 +59,23 @@ class ElastiCacheManager:
                 )
                 result.append(offering)
             except KeyError as e:
-                logging.error(f"Key error: {e}")
+                logging.error(
+                    f"Missing required key in offering: {e}, "
+                    f"offering_id: {offering.get('ReservedCacheNodesOfferingId', 'unknown')}"
+                )
+                continue
             except ValueError as e:
-                logging.error(f"Value error: {e}")
+                logging.error(
+                    f"Invalid value in offering: {e}, "
+                    f"offering_id: {offering.get('ReservedCacheNodesOfferingId', 'unknown')}"
+                )
+                continue
             except Exception as e:
-                logging.error(f"An unexpected error occurred: {e}")
+                logging.error(
+                    f"Unexpected error processing offering: {e}, "
+                    f"offering_id: {offering.get('ReservedCacheNodesOfferingId', 'unknown')}"
+                )
+                continue
         return result
 
     def get_offerings(self, params: ElastiCacheParams) -> List[Dict[str, Any]]:
@@ -79,6 +91,11 @@ class ElastiCacheManager:
                 else:
                     break
             return result
-        except boto3.exceptions.Boto3Error as e:
-            logging.error(f"An error occurred: {e}")
-            return []
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            error_message = e.response['Error']['Message']
+            logging.error(f"AWS API Error ({error_code}): {error_message}")
+            raise
+        except BotoCoreError as e:
+            logging.error(f"AWS SDK Error: {e}")
+            raise
