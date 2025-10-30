@@ -35,8 +35,8 @@ class RDSManager:
         return command
 
     def add_keys_to_offerings(
-        self, offerings: Dict[str, Any], params: RDSPurchaseParams
-    ) -> Dict[str, Any]:
+        self, offerings: List[Dict[str, Any]], params: RDSPurchaseParams
+    ) -> List[Dict[str, Any]]:
         result = []
         for offering in offerings:
             try:

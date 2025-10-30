@@ -45,8 +45,8 @@ class SavingsPlansManager:
         return command
 
     def add_keys_to_offerings(
-        self, offerings: Dict[str, Any], params: SavingsPlansPurchaseParams
-    ) -> Dict[str, Any]:
+        self, offerings: List[Dict[str, Any]], params: SavingsPlansPurchaseParams
+    ) -> List[Dict[str, Any]]:
         result = []
         for offering in offerings:
             try:
